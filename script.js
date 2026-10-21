@@ -522,14 +522,23 @@ $("scanBorrow").addEventListener("click", async () => {
       async decodedText => {
         $("borrowQr").value = decodedText.trim();
 
-        const book = getBook(decodedText.trim());
+      const book = getBook(decodedText.trim());
 
-        if (book) {
-          $("borrowBook").value = book.id;
-          notify("Scanned: " + book.title);
-        } else {
-          notify("QR code not found in the inventory.");
-        }
+      if (book) {
+      $("borrowBook").value = book.id;
+
+      const status = available(book)
+    ? "Available"
+    : "Currently borrowed";
+
+  notify(
+    "Scanned: " + book.title +
+    " | Category: " + book.category +
+    " | Status: " + status
+  );
+} else {
+  notify("QR code not found in the inventory.");
+}
 
         await stopScanner();
       },
